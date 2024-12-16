@@ -794,20 +794,20 @@ function jsPDF(options) {
   });
 
   var standardFonts = [
-    ["Helvetica", "helvetica", "normal", "WinAnsiEncoding"],
-    ["Helvetica-Bold", "helvetica", "bold", "WinAnsiEncoding"],
-    ["Helvetica-Oblique", "helvetica", "italic", "WinAnsiEncoding"],
-    ["Helvetica-BoldOblique", "helvetica", "bolditalic", "WinAnsiEncoding"],
-    ["Courier", "courier", "normal", "WinAnsiEncoding"],
-    ["Courier-Bold", "courier", "bold", "WinAnsiEncoding"],
-    ["Courier-Oblique", "courier", "italic", "WinAnsiEncoding"],
-    ["Courier-BoldOblique", "courier", "bolditalic", "WinAnsiEncoding"],
+    // ["Helvetica", "helvetica", "normal", "WinAnsiEncoding"],
+    // ["Helvetica-Bold", "helvetica", "bold", "WinAnsiEncoding"],
+    // ["Helvetica-Oblique", "helvetica", "italic", "WinAnsiEncoding"],
+    // ["Helvetica-BoldOblique", "helvetica", "bolditalic", "WinAnsiEncoding"],
+    // ["Courier", "courier", "normal", "WinAnsiEncoding"],
+    // ["Courier-Bold", "courier", "bold", "WinAnsiEncoding"],
+    // ["Courier-Oblique", "courier", "italic", "WinAnsiEncoding"],
+    // ["Courier-BoldOblique", "courier", "bolditalic", "WinAnsiEncoding"],
     ["Times-Roman", "times", "normal", "WinAnsiEncoding"],
     ["Times-Bold", "times", "bold", "WinAnsiEncoding"],
     ["Times-Italic", "times", "italic", "WinAnsiEncoding"],
     ["Times-BoldItalic", "times", "bolditalic", "WinAnsiEncoding"],
-    ["ZapfDingbats", "zapfdingbats", "normal", null],
-    ["Symbol", "symbol", "normal", null]
+    // ["ZapfDingbats", "zapfdingbats", "normal", null],
+    // ["Symbol", "symbol", "normal", null]
   ];
 
   API.__private__.getStandardFonts = function() {
@@ -5898,21 +5898,21 @@ function jsPDF(options) {
 
     // @if MODULE_FORMAT='cjs'
     // eslint-disable-next-line no-unreachable
-    var fs = require("fs");
-    var buffer = Buffer.from(getArrayBuffer(buildDocument()));
-    if (options.returnPromise === false) {
-      fs.writeFileSync(filename, buffer);
-    } else {
-      return new Promise(function(resolve, reject) {
-        fs.writeFile(filename, buffer, function(err) {
-          if (err) {
-            reject(err);
-          } else {
-            resolve();
-          }
-        });
-      });
-    }
+    // var fs = require("fs");
+    // var buffer = Buffer.from(getArrayBuffer(buildDocument()));
+    // if (options.returnPromise === false) {
+    //   fs.writeFileSync(filename, buffer);
+    // } else {
+    //   return new Promise(function(resolve, reject) {
+    //     fs.writeFile(filename, buffer, function(err) {
+    //       if (err) {
+    //         reject(err);
+    //       } else {
+    //         resolve();
+    //       }
+    //     });
+    //   });
+    // }
     // @endif
   };
 

@@ -10,8 +10,8 @@ var atob, btoa;
   // @endif
 
   // @if MODULE_FORMAT='cjs'
-  atob = require("atob");
-  btoa = require("btoa");
+  // atob = require("atob");
+  // btoa = require("btoa");
   // @endif
 })();
 

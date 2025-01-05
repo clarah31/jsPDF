@@ -217,6 +217,7 @@ function jsPDF(options) {
   var floatPrecision = 16;
   var defaultPathOperation = "S";
   var encryptionOptions = null;
+  var __MKITjsPdf = options.__MKITjsPdf;
 
   options = options || {};
 
@@ -2000,6 +2001,15 @@ function jsPDF(options) {
   });
 
   var putFont = function(font) {
+    if ( __MKITjsPdf ){
+      __MKITjsPdf.putFont( {
+        font: font,
+        out: out,
+        newObject: newObject,
+        putStream: putStream
+      })
+      return;
+    }    
     events.publish("putFont", {
       font: font,
       out: out,
@@ -2447,11 +2457,18 @@ function jsPDF(options) {
       isStandardFont: isStandardFont || false,
       metadata: {}
     };
+    if ( __MKITjsPdf ){
+      __MKITjsPdf.addFont({
+        font: font,
+        instance: this
+      })
+    }else {
+      events.publish("addFont", {
+        font: font,
+        instance: this
+      });
+    }
 
-    events.publish("addFont", {
-      font: font,
-      instance: this
-    });
 
     fonts[font.id] = font;
     addFontToFontDictionary(font);
@@ -3435,7 +3452,29 @@ function jsPDF(options) {
    * @memberof jsPDF#
    * @name text
    */
+  API.addContent = function(str) {
+    out(str)
+  }
   API.__private__.text = API.text = function(text, x, y, options, transform) {
+    var xtra = "";
+
+    if ( __MKITjsPdf){
+      const font = fonts[activeFontKey];
+      const payload={
+        activeFontKey:activeFontKey,
+        activeFontSize:activeFontSize,
+        font:font,
+        lineHeight:lineHeight,
+        textColor:textColor,
+        hpf:hpf,
+        xtra:xtra,
+      }
+      if (__MKITjsPdf.drawContent(payload,text,x,y,options,transform) )
+      {
+        usedFonts[activeFontKey]=true;
+      }
+      return this;
+    }
     /*
      * Inserts something like this into PDF
      *   BT
@@ -3509,7 +3548,6 @@ function jsPDF(options) {
       return scope;
     }
 
-    var xtra = "";
     var isHex = false;
     var lineHeight =
       typeof options.lineHeightFactor === "number"

@@ -3455,6 +3455,9 @@ function jsPDF(options) {
   API.addContent = function(str) {
     out(str)
   }
+  API.getMkitPdf = function () {
+    return __MKITjsPdf
+  }
   API.__private__.text = API.text = function(text, x, y, options, transform) {
     var xtra = "";
 

@@ -217,8 +217,6 @@ function jsPDF(options) {
   var floatPrecision = 16;
   var defaultPathOperation = "S";
   var encryptionOptions = null;
-  var __MKITjsPdf = options.__MKITjsPdf;
-
   options = options || {};
 
   if (typeof options === "object") {
@@ -2001,22 +1999,12 @@ function jsPDF(options) {
   });
 
   var putFont = function(font) {
-    if ( __MKITjsPdf ){
-      __MKITjsPdf.putFont( {
-        font: font,
-        out: out,
-        newObject: newObject,
-        putStream: putStream
-      })
-      return;
-    }    
     events.publish("putFont", {
       font: font,
       out: out,
       newObject: newObject,
       putStream: putStream
     });
-
     if (font.isAlreadyPutted !== true) {
       font.objectNumber = newObject();
       out("<<");
@@ -2457,17 +2445,10 @@ function jsPDF(options) {
       isStandardFont: isStandardFont || false,
       metadata: {}
     };
-    if ( __MKITjsPdf ){
-      __MKITjsPdf.addFont({
-        font: font,
-        instance: this
-      })
-    }else {
       events.publish("addFont", {
         font: font,
         instance: this
       });
-    }
 
 
     fonts[font.id] = font;
@@ -3455,29 +3436,9 @@ function jsPDF(options) {
   API.addContent = function(str) {
     out(str)
   }
-  API.getMkitPdf = function () {
-    return __MKITjsPdf
-  }
   API.__private__.text = API.text = function(text, x, y, options, transform) {
     var xtra = "";
 
-    if ( __MKITjsPdf){
-      const font = fonts[activeFontKey];
-      const payload={
-        activeFontKey:activeFontKey,
-        activeFontSize:activeFontSize,
-        font:font,
-        lineHeight:lineHeight,
-        textColor:textColor,
-        hpf:hpf,
-        xtra:xtra,
-      }
-      if (__MKITjsPdf.drawContent(payload,text,x,y,options,transform) )
-      {
-        usedFonts[activeFontKey]=true;
-      }
-      return this;
-    }
     /*
      * Inserts something like this into PDF
      *   BT
@@ -4063,18 +4024,34 @@ function jsPDF(options) {
     for (var lineIndex = 0; lineIndex < da.length; lineIndex++) {
       wordSpacing = "";
 
-      switch (variant) {
-        case ARRAY:
-          content =
-            (isHex ? "<" : "(") + da[lineIndex][0] + (isHex ? ">" : ")");
-          posX = parseFloat(da[lineIndex][1]);
-          posY = parseFloat(da[lineIndex][2]);
-          break;
-        case STRING:
-          content = (isHex ? "<" : "(") + da[lineIndex] + (isHex ? ">" : ")");
-          posX = getHorizontalCoordinate(x);
-          posY = getVerticalCoordinate(y);
-          break;
+      if ( this.__MKITjsPdf ){
+        switch (variant) {
+          case ARRAY:
+            content = da[lineIndex][0];
+            posX = parseFloat(da[lineIndex][1]);
+            posY = parseFloat(da[lineIndex][2]);
+            break;
+          case STRING:
+            content = da[lineIndex]
+            posX = getHorizontalCoordinate(x);
+            posY = getVerticalCoordinate(y);
+            break;
+        }
+
+      }else {
+        switch (variant) {
+          case ARRAY:
+            content =
+              (isHex ? "<" : "(") + da[lineIndex][0] + (isHex ? ">" : ")");
+            posX = parseFloat(da[lineIndex][1]);
+            posY = parseFloat(da[lineIndex][2]);
+            break;
+          case STRING:
+            content = (isHex ? "<" : "(") + da[lineIndex] + (isHex ? ">" : ")");
+            posX = getHorizontalCoordinate(x);
+            posY = getVerticalCoordinate(y);
+            break;
+        }
       }
 
       if (
@@ -4100,9 +4077,13 @@ function jsPDF(options) {
         );
       }
     }
-
-    text = variant === STRING ? text.join(" Tj\nT* ") : text.join(" Tj\n");
-    text += " Tj\n";
+    if ( !this.__MKITjsPdf ){
+      text = variant === STRING ? text.join(" Tj\nT* ") : text.join(" Tj\n");
+      text += " Tj\n";
+    }else {
+      text = variant === STRING ? text.join(" Tj\nT* ") : text.join(" Tj\n");
+      text += "\n";
+    }
 
     var result = "BT\n/";
     result += activeFontKey + " " + activeFontSize + " Tf\n"; // font face, style, size

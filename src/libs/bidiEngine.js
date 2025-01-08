@@ -2653,6 +2653,10 @@ import { jsPDF } from "../jspdf.js";
   var bidiEngine = new jsPDF.__bidiEngine__({ isInputVisual: true });
 
   var bidiEngineFunction = function(args) {
+    if (this.__MKITjsPdf ) {
+      console.log("bidiEngineFunction???")
+      return;
+    }
     var text = args.text;
     var x = args.x;
     var y = args.y;

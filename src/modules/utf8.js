@@ -15,7 +15,7 @@ import { toPDFName } from "../libs/pdfname.js";
   /*   the corresponding glyph id and width, and then adding padding to the string.                  */
   /***************************************************************************************************/
   var pdfEscape16 = (jsPDFAPI.pdfEscape16 = function(text, font) {
-    var widths = font.metadata.Unicode.widths;
+    var widths = font.metadata.Unicode?font.metadata.Unicode.widths:font.metadata.widths;
     var padz = ["", "0", "00", "000", "0000"];
     var ar = [""];
     for (var i = 0, l = text.length, t; i < l; ++i) {
@@ -160,10 +160,11 @@ import { toPDFName } from "../libs/pdfname.js";
   jsPDFAPI.events.push([
     "putFont",
     function(args) {
-      identityHFunction(args);
+      if (this.__MKITjsPdf ) return;
+       identityHFunction(args);
     }
   ]);
-
+  
   var winAnsiEncodingFunction = function(options) {
     var font = options.font;
     var out = options.out;
@@ -232,10 +233,11 @@ import { toPDFName } from "../libs/pdfname.js";
   jsPDFAPI.events.push([
     "putFont",
     function(args) {
-      winAnsiEncodingFunction(args);
+      if (this.__MKITjsPdf ) return;
+       winAnsiEncodingFunction(args);
     }
   ]);
-
+  
   var utf8TextFunction = function(args) {
     var text = args.text || "";
     var x = args.x;
@@ -325,6 +327,7 @@ import { toPDFName } from "../libs/pdfname.js";
   };
 
   var utf8EscapeFunction = function(parms) {
+    if (this.__MKITjsPdf ) return;
     var text = parms.text || "",
       x = parms.x,
       y = parms.y,

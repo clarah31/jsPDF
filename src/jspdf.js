@@ -368,6 +368,11 @@ function jsPDF(options) {
     fontStyle,
     fontWeight
   ) {
+    if ( API.__MKITjsPdf ){
+      if (fontWeight) 
+        return (fontStyle+'-'+fontWeight).toLowerCase()
+      return (fontStyle).toLowerCase()
+    }
     if (
       (fontStyle == "bold" && fontWeight == "normal") ||
       (fontStyle == "bold" && fontWeight == 400) ||
@@ -2854,7 +2859,7 @@ function jsPDF(options) {
       encryptor = encryption.encryptor(objectId, 0);
     }
     out("<<");
-    out("/Producer (" + pdfEscape(encryptor("jsPDF " + jsPDF.version)) + ")");
+    out("/Producer (" + pdfEscape(encryptor("MKITFPdf(by jsPDF) " + jsPDF.version)) + ")");
     for (var key in documentProperties) {
       if (documentProperties.hasOwnProperty(key) && documentProperties[key]) {
         out(

@@ -2653,9 +2653,13 @@ import { jsPDF } from "../jspdf.js";
   var bidiEngine = new jsPDF.__bidiEngine__({ isInputVisual: true });
 
   var bidiEngineFunction = function(args) {
+    console.log("postProcessText bidiEngineFunction...",args)
     if (this.__MKITjsPdf ) {
-      console.log("bidiEngineFunction???")
-      return;
+      var font = args.mutex.fonts[args.mutex.activeFontKey];
+      if ( font && font.metadata && font.metadata.encode )
+      {
+      //  return;
+      }
     }
     var text = args.text;
     var x = args.x;
@@ -2688,6 +2692,7 @@ import { jsPDF } from "../jspdf.js";
       args.text = bidiEngine.doBidiReorder(text);
     }
     bidiEngine.setOptions({ isInputVisual: true });
+    console.log("postProcessText bidiEngineFunction...end:",args)
   };
 
   jsPDF.API.events.push(["postProcessText", bidiEngineFunction]);

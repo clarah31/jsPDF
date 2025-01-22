@@ -43,8 +43,11 @@ import { atob } from "../libs/AtobBtoa.js";
   jsPDF.API.events.push([
     "addFont",
     function(data) {
-      if ( this.__MKITjsPdf )
-        return
+      if ( this.__MKITjsPdf ){
+        if ( data.font.encoding !== "WinAnsiEncoding")
+          return
+      }
+        
       var file = undefined;
       var font = data.font;
       var instance = data.instance;

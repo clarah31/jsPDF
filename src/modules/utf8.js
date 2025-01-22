@@ -160,8 +160,13 @@ import { toPDFName } from "../libs/pdfname.js";
   jsPDFAPI.events.push([
     "putFont",
     function(args) {
-      if (this.__MKITjsPdf ) return;
-       identityHFunction(args);
+      if (this.__MKITjsPdf ){
+        const f = args.font;
+        if (f.encoding !== "WinAnsiEncoding"){
+          return
+        }
+      }
+      identityHFunction(args);
     }
   ]);
   
@@ -233,7 +238,13 @@ import { toPDFName } from "../libs/pdfname.js";
   jsPDFAPI.events.push([
     "putFont",
     function(args) {
-      if (this.__MKITjsPdf ) return;
+      if (this.__MKITjsPdf ){
+        const f = args.font;
+        if (f.encoding !== "WinAnsiEncoding"){
+          return
+        }
+
+      } 
        winAnsiEncodingFunction(args);
     }
   ]);
@@ -327,7 +338,13 @@ import { toPDFName } from "../libs/pdfname.js";
   };
 
   var utf8EscapeFunction = function(parms) {
-    if (this.__MKITjsPdf ) return;
+    if (this.__MKITjsPdf ) {
+      const f = parms.mutex.fonts[parms.mutex.activeFontKey];
+      if (f.encoding !== "WinAnsiEncoding")
+        return
+
+    }
+    
     var text = parms.text || "",
       x = parms.x,
       y = parms.y,

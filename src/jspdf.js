@@ -776,7 +776,7 @@ function jsPDF(options) {
     string = string.toString();
     contentLength += string.length + 1;
     outputDestination.push(string);
-
+    console.log("out",string)
     return outputDestination;
   });
 

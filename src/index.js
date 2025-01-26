@@ -4,7 +4,7 @@ export * from "./jspdf.js";
 export * from "./modules/acroform.js";
 import "./modules/addimage.js";
 import "./modules/annotations.js";
-//import "./modules/arabic.js";
+import "./modules/arabic.js";
 import "./modules/autoprint.js";
 import "./modules/canvas.js";
 import "./modules/cell.js";
@@ -31,7 +31,7 @@ import "./modules/xmp_metadata.js";
 import "./modules/utf8.js";
 import "./modules/vfs.js";
 
-//import "./libs/bidiEngine.js";
+import "./libs/bidiEngine.js";
 import "./libs/ttffont.js";
 
 export default jsPDF;
